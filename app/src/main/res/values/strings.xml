@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NoteApp</string>
+    <string name="add_note">Add note</string>
+    <string name="notes_are_not_added">Tap on plus button to add a note.</string>
+    <string name="remove_note">Delete note</string>
+    <string name="title_hint">Enter title</string>
+    <string name="body_hint">Enter note text</string>
 </resources>
