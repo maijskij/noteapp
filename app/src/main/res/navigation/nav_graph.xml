@@ -22,6 +22,11 @@
         tools:layout="@layout/fragment_note_details">
         <argument
             android:name="idAsString"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true"/>
+        <action
+            android:id="@+id/toNotesList"
+            app:destination="@id/NotesListFragment" />
     </fragment>
 </navigation>
