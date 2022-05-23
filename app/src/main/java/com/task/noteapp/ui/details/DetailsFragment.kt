@@ -11,10 +11,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.task.noteapp.R
 import com.task.noteapp.databinding.FragmentNoteDetailsBinding
-import com.task.noteapp.ui.bidirectionalBinding
+import com.task.noteapp.ui.utils.bidirectionalBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {

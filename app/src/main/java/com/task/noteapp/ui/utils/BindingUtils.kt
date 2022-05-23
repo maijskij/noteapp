@@ -1,4 +1,4 @@
-package com.task.noteapp.ui
+package com.task.noteapp.ui.utils
 
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
@@ -22,5 +22,4 @@ fun EditText.bidirectionalBinding(
             liveData.value = newValue
         }
     }
-
 }

@@ -5,4 +5,6 @@
     <string name="remove_note">Delete note</string>
     <string name="title_hint">Enter title</string>
     <string name="body_hint">Enter note text</string>
+    <string name="created">Created: %1$s</string>
+    <string name="updated">Updated: %1$s</string>
 </resources>

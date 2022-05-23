@@ -1,5 +1,6 @@
 package com.task.noteapp.ui.list
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.task.noteapp.R
-import com.task.noteapp.domain.Note
+import com.task.noteapp.data.model.Note
+import com.task.noteapp.ui.utils.asHumanReadableString
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class NotesAdapter @Inject constructor() :
+class NotesAdapter @Inject constructor(@ApplicationContext private val appContext: Context) :
     ListAdapter<Note, NotesAdapter.NotesAdapterHolder>(DIFF_CALLBACK) {
 
     private var onClick: ((Note) -> Unit)? = null
@@ -27,6 +30,18 @@ class NotesAdapter @Inject constructor() :
         val note = getItem(position)
         holder.titleView.text = note.title
         holder.descriptionView.text = note.description
+
+        val createdLabel = appContext.resources.getString(
+            R.string.created,
+            note.createdTime.asHumanReadableString()
+        )
+        holder.createdView.text = createdLabel
+
+        val updatedLabel = appContext.resources.getString(
+            R.string.updated,
+            note.modifiedTime.asHumanReadableString()
+        )
+        holder.updatedView.text = updatedLabel
     }
 
     fun setOnClickListener(onClickHandler: (Note) -> Unit) {
@@ -37,6 +52,8 @@ class NotesAdapter @Inject constructor() :
         RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.findViewById(R.id.title)
         val descriptionView: TextView = view.findViewById(R.id.description)
+        val createdView: TextView = view.findViewById(R.id.note_created)
+        val updatedView: TextView = view.findViewById(R.id.note_updated)
 
         init {
             view.setOnClickListener { onClick(adapterPosition) }
@@ -51,6 +68,7 @@ class NotesAdapter @Inject constructor() :
             override fun areContentsTheSame(oldItem: Note, newItem: Note) =
                 oldItem == newItem
         }
+
     }
 }
 

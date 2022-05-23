@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/NotesListFragment"
         android:name="com.task.noteapp.ui.list.NotesListFragment"
-        android:label="List"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_notes_list">
 
         <action

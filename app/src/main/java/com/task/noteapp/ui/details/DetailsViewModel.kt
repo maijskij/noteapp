@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.task.noteapp.domain.Note
+import com.task.noteapp.data.model.Note
 import com.task.noteapp.domain.NotesRepository
 import com.task.noteapp.domain.RepositoryResource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,9 +28,10 @@ class DetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(State())
     val uiState: StateFlow<State> = _uiState.asStateFlow()
 
-    private val noteId = savedStateHandle.get<String>("idAsString")
+    private var existingNote: Note? = null
 
     init {
+        val noteId = savedStateHandle.get<String>("idAsString")
         if (noteId != null) {
             loadExistingNote(noteId)
         }
@@ -41,8 +43,8 @@ class DetailsViewModel @Inject constructor(
 
     fun deleteNote() {
         viewModelScope.launch {
-            if (noteId != null) {
-                notesRepository.deleteNote(noteId)
+            existingNote?.let {
+                notesRepository.deleteNote(it.id)
             }
             goToNotesList()
         }
@@ -50,11 +52,15 @@ class DetailsViewModel @Inject constructor(
 
     fun saveOrUpdate() {
         viewModelScope.launch {
-            if (noteId == null) {
-                notesRepository.addNewNote(createNote())
+
+            val note = assembleNote()
+
+            if (existingNote == null) {
+                notesRepository.addNewNote(note)
             } else {
-                notesRepository.updateNote(createNote())
+                notesRepository.updateNote(note)
             }
+            goToNotesList()
         }
     }
 
@@ -65,6 +71,7 @@ class DetailsViewModel @Inject constructor(
                     updateErrorMessage(result.error.toString())
                 }
                 is RepositoryResource.Success -> {
+                    existingNote = result.data
                     noteTitleText.value = result.data.title
                     noteBodyText.value = result.data.description
                 }
@@ -78,19 +85,21 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-
     private fun goToNotesList() {
         _uiState.update { currentState ->
             currentState.copy(goToNotesList = true)
         }
     }
 
-    private fun createNote() =
-        if (noteId == null) {
-            Note("1", noteTitleText.toString(), noteBodyText.toString())
-        } else {
-            Note(noteId, noteTitleText.toString(), noteBodyText.toString())
-        }
+    private fun assembleNote(): Note {
+        val note = existingNote
+        val timeNow =  Date(System.currentTimeMillis())
+        return note?.copy(
+            title = noteTitleText.value.toString(),
+            description = noteBodyText.value.toString(),
+            modifiedTime = timeNow
+        ) ?: Note(noteTitleText.value.toString(), noteBodyText.value.toString(), timeNow, timeNow)
+    }
 
 
     data class State(

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -57,17 +56,23 @@ class NotesListFragment : Fragment() {
     }
 
     private fun handleNewState(newState: NotesListViewModel.State) {
-        if (newState.errorMessage != null) {
-            Toast.makeText(requireActivity(), newState.errorMessage, Toast.LENGTH_LONG).show()
-            viewModel.onErrorShown()
-        }
-        if (newState.notes.isEmpty()) {
-            binding.emptyLayout.visibility = View.VISIBLE
-            binding.notesList.visibility = View.GONE
-        } else {
-            binding.emptyLayout.visibility = View.GONE
-            binding.notesList.visibility = View.VISIBLE
-            notesAdapter.submitList(newState.notes)
+        with(binding) {
+            if (newState.showInitialLoading) {
+                emptyLayout.visibility = View.GONE
+                notesList.visibility = View.GONE
+                loadingLayout.visibility = View.VISIBLE
+            } else {
+                if (newState.notes.isEmpty()) {
+                    emptyLayout.visibility = View.VISIBLE
+                    notesList.visibility = View.GONE
+                    loadingLayout.visibility = View.GONE
+                } else {
+                    emptyLayout.visibility = View.GONE
+                    notesList.visibility = View.VISIBLE
+                    loadingLayout.visibility = View.GONE
+                    notesAdapter.submitList(newState.notes)
+                }
+            }
         }
     }
 
