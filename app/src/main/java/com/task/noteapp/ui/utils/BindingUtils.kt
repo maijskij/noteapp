@@ -16,7 +16,7 @@ fun EditText.bidirectionalBinding(
         }
     }
 
-    doOnTextChanged { text, start, before, count ->
+    doOnTextChanged { text, _, _, _ ->
         val newValue = text?.toString()
         if (liveData.value != newValue) {
             liveData.value = newValue
