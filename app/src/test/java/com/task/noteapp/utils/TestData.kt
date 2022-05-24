@@ -4,5 +4,8 @@ import com.task.noteapp.data.model.Note
 import java.util.*
 
 
-fun createTestNote(title: String = "Title", subTitle: String = "Description") =
-    Note(title, subTitle, Date(), Date())
+fun createTestNote(
+    title: String = "Title",
+    description: String = "Description",
+    imageUrl: String = "http://any.com/image.jpg"
+) = Note(title, description, imageUrl, Date(), Date())

@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.task.noteapp.data.model.Note
 
 
-@Database(entities = [Note::class], version = 1)
+@Database(entities = [Note::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class NotesDatabase : RoomDatabase() {
 

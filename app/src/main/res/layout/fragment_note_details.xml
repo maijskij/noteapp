@@ -22,18 +22,37 @@
                 android:background="@null"
                 android:hint="@string/title_hint"
                 android:imeOptions="flagNoExtractUi"
+                android:importantForAutofill="no"
+                android:inputType="text"
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textStyle="bold" />
+
+
+            <EditText
+                android:id="@+id/note_image_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/image_url_hint"
+                android:imeOptions="flagNoExtractUi"
+                android:importantForAutofill="no"
+                android:inputType="textUri"
+                android:maxLines="2" />
 
             <EditText
                 android:id="@+id/note_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="@null"
                 android:gravity="top"
                 android:hint="@string/body_hint"
-                android:imeOptions="flagNoExtractUi" />
+                android:imeOptions="flagNoExtractUi"
+                android:importantForAutofill="no"
+                android:inputType="text" />
         </LinearLayout>
 
     </ScrollView>

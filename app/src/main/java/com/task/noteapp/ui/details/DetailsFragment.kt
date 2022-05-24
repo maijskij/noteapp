@@ -50,6 +50,7 @@ class DetailsFragment : Fragment() {
 
         binding.noteBody.bidirectionalBinding(viewLifecycleOwner, viewModel.noteBodyText)
         binding.noteTitle.bidirectionalBinding(viewLifecycleOwner, viewModel.noteTitleText)
+        binding.noteImageUrl.bidirectionalBinding(viewLifecycleOwner, viewModel.noteImageUrl)
     }
 
 

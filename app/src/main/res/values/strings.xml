@@ -7,4 +7,6 @@
     <string name="body_hint">Enter note text</string>
     <string name="created">Created: %1$s</string>
     <string name="updated">Updated: %1$s</string>
+    <string name="image_url_hint">Enter image url</string>
+    <string name="note_image">Image of the note</string>
 </resources>

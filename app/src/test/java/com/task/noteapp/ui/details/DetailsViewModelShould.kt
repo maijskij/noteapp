@@ -122,16 +122,19 @@ class DetailsViewModelShould {
     fun `Save note when floating button pressed`(): Unit = runTest {
         val title = "Title"
         val description = "Description"
+        val imageUrl = "https://image"
 
         detailsViewModel = DetailsViewModel(savedStateHandleMock, notesRepositoryMock)
         detailsViewModel.noteTitleText.value = title
         detailsViewModel.noteBodyText.value = description
+        detailsViewModel.noteImageUrl.value = imageUrl
         detailsViewModel.saveOrUpdate()
 
         val noteCaptor = argumentCaptor<Note>()
         verify(notesRepositoryMock).addNewNote(noteCaptor.capture())
         assertThat(noteCaptor.firstValue.title).isEqualTo(title)
         assertThat(noteCaptor.firstValue.description).isEqualTo(description)
+        assertThat(noteCaptor.firstValue.imageUrl).isEqualTo(imageUrl)
         assertThat(noteCaptor.firstValue.modifiedTime).isEqualTo(noteCaptor.firstValue.createdTime)
         assertThat( detailsViewModel.uiState.first().goToNotesList).isEqualTo(true)
     }
@@ -140,6 +143,7 @@ class DetailsViewModelShould {
     fun `Update note when floating button pressed`(): Unit = runTest {
         val title = "Title2"
         val description = "Description2"
+        val imageUrl = "https://image2"
         val note = createTestNote()
         val noteId = "1"
         whenever(savedStateHandleMock.get<String>("idAsString")) doReturn noteId
@@ -148,12 +152,14 @@ class DetailsViewModelShould {
         detailsViewModel = DetailsViewModel(savedStateHandleMock, notesRepositoryMock)
         detailsViewModel.noteTitleText.value = title
         detailsViewModel.noteBodyText.value = description
+        detailsViewModel.noteImageUrl.value = imageUrl
         detailsViewModel.saveOrUpdate()
 
         val noteCaptor = argumentCaptor<Note>()
         verify(notesRepositoryMock).updateNote(noteCaptor.capture())
         assertThat(noteCaptor.firstValue.title).isEqualTo(title)
         assertThat(noteCaptor.firstValue.description).isEqualTo(description)
+        assertThat(noteCaptor.firstValue.imageUrl).isEqualTo(imageUrl)
         assertThat(noteCaptor.firstValue.modifiedTime).isAfter(noteCaptor.firstValue.createdTime)
         assertThat( detailsViewModel.uiState.first().goToNotesList).isEqualTo(true)
     }

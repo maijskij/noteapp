@@ -4,10 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.task.noteapp.R
 import com.task.noteapp.data.model.Note
 import com.task.noteapp.ui.utils.asHumanReadableString
@@ -42,6 +44,13 @@ class NotesAdapter @Inject constructor(@ApplicationContext private val appContex
             note.modifiedTime.asHumanReadableString()
         )
         holder.updatedView.text = updatedLabel
+
+        if (note.imageUrl.isNotBlank()) {
+            Picasso.get().load(note.imageUrl).into(holder.noteImage)
+            holder.noteImage.visibility = View.VISIBLE
+        } else {
+            holder.noteImage.visibility = View.GONE
+        }
     }
 
     fun setOnClickListener(onClickHandler: (Note) -> Unit) {
@@ -52,6 +61,7 @@ class NotesAdapter @Inject constructor(@ApplicationContext private val appContex
         RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.findViewById(R.id.title)
         val descriptionView: TextView = view.findViewById(R.id.description)
+        val noteImage: ImageView = view.findViewById(R.id.note_image)
         val createdView: TextView = view.findViewById(R.id.note_created)
         val updatedView: TextView = view.findViewById(R.id.note_updated)
 

@@ -24,6 +24,7 @@ class DetailsViewModel @Inject constructor(
 
     var noteBodyText = MutableLiveData("")
     var noteTitleText = MutableLiveData("")
+    var noteImageUrl = MutableLiveData("")
 
     private val _uiState = MutableStateFlow(State())
     val uiState: StateFlow<State> = _uiState.asStateFlow()
@@ -74,6 +75,7 @@ class DetailsViewModel @Inject constructor(
                     existingNote = result.data
                     noteTitleText.value = result.data.title
                     noteBodyText.value = result.data.description
+                    noteImageUrl.value = result.data.imageUrl
                 }
             }
         }
@@ -93,12 +95,19 @@ class DetailsViewModel @Inject constructor(
 
     private fun assembleNote(): Note {
         val note = existingNote
-        val timeNow =  Date(System.currentTimeMillis())
+        val timeNow = Date(System.currentTimeMillis())
         return note?.copy(
             title = noteTitleText.value.toString(),
             description = noteBodyText.value.toString(),
+            imageUrl = noteImageUrl.value.toString(),
             modifiedTime = timeNow
-        ) ?: Note(noteTitleText.value.toString(), noteBodyText.value.toString(), timeNow, timeNow)
+        ) ?: Note(
+            noteTitleText.value.toString(),
+            noteBodyText.value.toString(),
+            noteImageUrl.value.toString(),
+            timeNow,
+            timeNow
+        )
     }
 
 

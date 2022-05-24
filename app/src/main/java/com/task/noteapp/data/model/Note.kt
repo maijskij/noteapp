@@ -10,6 +10,7 @@ import java.util.*
 data class Note @JvmOverloads constructor(
     @ColumnInfo(name = "title") var title: String = "",
     @ColumnInfo(name = "description") var description: String = "",
+    @ColumnInfo(name = "image_url") var imageUrl: String = "",
     @ColumnInfo(name = "created_time") var createdTime: Date,
     @ColumnInfo(name = "modified_time") var modifiedTime: Date,
     @PrimaryKey @ColumnInfo(name = "entryid") var id: String = UUID.randomUUID().toString()

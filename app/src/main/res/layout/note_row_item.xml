@@ -12,8 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
-        android:padding="8dp">
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="8dp"
+        tools:ignore="UnusedAttribute">
 
         <TextView
             android:id="@+id/title"
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/note_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Title" />
@@ -30,31 +32,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:maxLines="@integer/max_line_description_summary"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintEnd_toStartOf="@+id/note_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
             tools:text="Description" />
 
-
         <TextView
             android:id="@+id/note_created"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/note_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description"
             tools:text="Created: 2 hours ago" />
 
         <TextView
             android:id="@+id/note_updated"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/note_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/note_created"
             tools:text="Updated: 1 minute ago" />
+
+        <ImageView
+            android:id="@+id/note_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="@string/note_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@mipmap/ic_launcher_round" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
