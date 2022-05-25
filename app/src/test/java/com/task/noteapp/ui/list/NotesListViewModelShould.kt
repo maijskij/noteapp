@@ -44,12 +44,12 @@ class NotesListViewModelShould {
 
 
         val uiState = notesListViewModel.uiState.first()
-        assertThat(uiState.notes).isEqualTo(emptyList<Note>())
+        assertThat(uiState.showEmptyState).isEqualTo(false)
         assertThat(uiState.showInitialLoading).isEqualTo(true)
     }
 
     @Test
-    fun `Set state with empty notes list`(): Unit = runTest {
+    fun `Set state when there are no notes lin the list`(): Unit = runTest {
 
         whenever(notesRepositoryMock.observeAllNotes()) doReturn observableNotes
 
@@ -57,7 +57,7 @@ class NotesListViewModelShould {
         observableNotes.value = emptyList()
 
         val uiState = notesListViewModel.uiState.first()
-        assertThat(uiState.notes).isEqualTo(emptyList<Note>())
+        assertThat(uiState.showEmptyState).isEqualTo(true)
         assertThat(uiState.showInitialLoading).isEqualTo(false)
     }
 
@@ -72,6 +72,7 @@ class NotesListViewModelShould {
 
         val uiState = notesListViewModel.uiState.first()
         assertThat(uiState.notes).isEqualTo(newNotes)
+        assertThat(uiState.showEmptyState).isEqualTo(false)
         assertThat(uiState.showInitialLoading).isEqualTo(false)
     }
 }

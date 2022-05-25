@@ -29,12 +29,17 @@ class NotesListViewModel @Inject constructor(
 
     private fun updateNotesList(notes: List<Note>) {
         _uiState.update { currentState ->
-            currentState.copy(notes = notes, showInitialLoading = false)
+            currentState.copy(
+                notes = notes,
+                showInitialLoading = false,
+                showEmptyState = notes.isEmpty()
+            )
         }
     }
 
     data class State(
         val showInitialLoading: Boolean = true,
+        val showEmptyState: Boolean = false,
         val notes: List<Note> = emptyList()
     )
 }

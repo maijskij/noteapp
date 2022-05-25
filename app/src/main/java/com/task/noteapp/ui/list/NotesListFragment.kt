@@ -57,21 +57,20 @@ class NotesListFragment : Fragment() {
 
     private fun handleNewState(newState: NotesListViewModel.State) {
         with(binding) {
+
             if (newState.showInitialLoading) {
+                loadingLayout.visibility = View.VISIBLE
                 emptyLayout.visibility = View.GONE
                 notesList.visibility = View.GONE
-                loadingLayout.visibility = View.VISIBLE
+            } else if (newState.showEmptyState) {
+                loadingLayout.visibility = View.GONE
+                emptyLayout.visibility = View.VISIBLE
+                notesList.visibility = View.GONE
             } else {
-                if (newState.notes.isEmpty()) {
-                    emptyLayout.visibility = View.VISIBLE
-                    notesList.visibility = View.GONE
-                    loadingLayout.visibility = View.GONE
-                } else {
-                    emptyLayout.visibility = View.GONE
-                    notesList.visibility = View.VISIBLE
-                    loadingLayout.visibility = View.GONE
-                    notesAdapter.submitList(newState.notes)
-                }
+                loadingLayout.visibility = View.GONE
+                emptyLayout.visibility = View.GONE
+                notesList.visibility = View.VISIBLE
+                notesAdapter.submitList(newState.notes)
             }
         }
     }

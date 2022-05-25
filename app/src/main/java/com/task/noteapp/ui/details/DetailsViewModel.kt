@@ -53,7 +53,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     fun saveOrUpdate() {
-        if (fieldsAreNotValid()){
+        if (fieldsAreNotValid()) {
             updateErrorMessage(R.string.title_validation_failed)
             return
         }
