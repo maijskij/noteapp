@@ -38,6 +38,4 @@ class AppModule {
             "Notes.db"
         ).build().notesDao()
     }
-
-
 }

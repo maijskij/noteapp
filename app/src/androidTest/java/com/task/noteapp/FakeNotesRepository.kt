@@ -6,8 +6,7 @@ import com.task.noteapp.data.model.Note
 import com.task.noteapp.domain.NotesRepository
 import com.task.noteapp.domain.RepositoryResource
 
-class
-FakeNotesRepository : NotesRepository {
+class FakeNotesRepository : NotesRepository {
 
     private val notesList = mutableListOf<Note>()
 
