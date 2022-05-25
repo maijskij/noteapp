@@ -1,4 +1,4 @@
-package com.task.noteapp
+package com.task.noteapp.mock
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

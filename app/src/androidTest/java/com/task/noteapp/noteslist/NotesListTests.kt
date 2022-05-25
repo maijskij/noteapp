@@ -5,7 +5,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import com.task.noteapp.FakeNotesRepository
+import com.task.noteapp.mock.FakeNotesRepository
 import com.task.noteapp.R
 import com.task.noteapp.createTestNote
 import com.task.noteapp.di.NotesRepositoryModule

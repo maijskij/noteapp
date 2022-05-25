@@ -81,4 +81,7 @@ dependencies {
 
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.38.1'
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.35'
+    androidTestImplementation "androidx.room:room-testing:2.4.2"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation 'org.assertj:assertj-core:3.21.0'
 }
