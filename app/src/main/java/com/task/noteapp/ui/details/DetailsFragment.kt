@@ -2,13 +2,13 @@ package com.task.noteapp.ui.details
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.task.noteapp.R
 import com.task.noteapp.databinding.FragmentNoteDetailsBinding
 import com.task.noteapp.ui.utils.bidirectionalBinding
@@ -74,8 +74,8 @@ class DetailsFragment : Fragment() {
     }
 
     private fun handleNewState(newState: DetailsViewModel.State) {
-        if (newState.errorMessage != null) {
-            Toast.makeText(requireActivity(), newState.errorMessage, Toast.LENGTH_LONG).show()
+        if (newState.errorMessageResId != null) {
+            Snackbar.make(binding.root, newState.errorMessageResId, Snackbar.LENGTH_SHORT).show()
             viewModel.onErrorShown()
         }
         if (newState.goToNotesList) {

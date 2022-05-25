@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.task.noteapp.R
 import com.task.noteapp.data.model.Note
 import com.task.noteapp.domain.NotesRepository
 import com.task.noteapp.domain.RepositoryResource
@@ -52,8 +53,12 @@ class DetailsViewModel @Inject constructor(
     }
 
     fun saveOrUpdate() {
-        viewModelScope.launch {
+        if (fieldsAreNotValid()){
+            updateErrorMessage(R.string.title_validation_failed)
+            return
+        }
 
+        viewModelScope.launch {
             val note = assembleNote()
 
             if (existingNote == null) {
@@ -65,11 +70,13 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    private fun fieldsAreNotValid() = noteTitleText.value.isNullOrBlank()
+
     private fun loadExistingNote(noteId: String) {
         viewModelScope.launch {
             when (val result = notesRepository.fetchNote(noteId)) {
                 is RepositoryResource.Error -> {
-                    updateErrorMessage(result.error.toString())
+                    updateErrorMessage(R.string.note_loading_error)
                 }
                 is RepositoryResource.Success -> {
                     existingNote = result.data
@@ -81,9 +88,9 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun updateErrorMessage(errorMessage: String?) {
+    private fun updateErrorMessage(errorMessageResId: Int?) {
         _uiState.update { currentState ->
-            currentState.copy(errorMessage = errorMessage)
+            currentState.copy(errorMessageResId = errorMessageResId)
         }
     }
 
@@ -112,7 +119,7 @@ class DetailsViewModel @Inject constructor(
 
 
     data class State(
-        val errorMessage: String? = null,
+        val errorMessageResId: Int? = null,
         val goToNotesList: Boolean = false
     )
 }

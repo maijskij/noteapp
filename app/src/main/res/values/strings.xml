@@ -9,4 +9,6 @@
     <string name="updated">Updated: %1$s</string>
     <string name="image_url_hint">Enter image url</string>
     <string name="note_image">Image of the note</string>
+    <string name="title_validation_failed">Title can not be blank</string>
+    <string name="note_loading_error">Note can not be found!</string>
 </resources>

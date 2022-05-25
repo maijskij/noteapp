@@ -2,6 +2,7 @@ package com.task.noteapp.ui.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
+import com.task.noteapp.R
 import com.task.noteapp.data.model.Note
 import com.task.noteapp.domain.NotesRepository
 import com.task.noteapp.domain.RepositoryResource
@@ -44,7 +45,7 @@ class DetailsViewModelShould {
 
         verify(notesRepositoryMock, never()).fetchNote(anyOrNull())
         val uiState = detailsViewModel.uiState.first()
-        assertThat(uiState.errorMessage).isEqualTo(null)
+        assertThat(uiState.errorMessageResId).isEqualTo(null)
         assertThat(uiState.goToNotesList).isEqualTo(false)
 
     }
@@ -61,7 +62,7 @@ class DetailsViewModelShould {
 
         verify(notesRepositoryMock).fetchNote(noteId)
         val uiState = detailsViewModel.uiState.first()
-        assertThat(uiState.errorMessage).isEqualTo(null)
+        assertThat(uiState.errorMessageResId).isEqualTo(null)
         assertThat(uiState.goToNotesList).isEqualTo(false)
         assertThat(detailsViewModel.noteTitleText.value).isEqualTo(note.title)
         assertThat(detailsViewModel.noteBodyText.value).isEqualTo(note.description)
@@ -70,8 +71,7 @@ class DetailsViewModelShould {
     @Test
     fun `Set error state when note loading failed`(): Unit = runTest {
 
-        val errorMessage = "Something went wrong!"
-        val throwable = Throwable(errorMessage)
+        val throwable = Throwable()
         val noteId = "1"
         whenever(savedStateHandleMock.get<String>("idAsString")) doReturn noteId
         whenever(notesRepositoryMock.fetchNote(noteId)) doReturn RepositoryResource.Error(throwable)
@@ -79,7 +79,7 @@ class DetailsViewModelShould {
         detailsViewModel = DetailsViewModel(savedStateHandleMock, notesRepositoryMock)
 
         val uiState = detailsViewModel.uiState.first()
-        assertThat(uiState.errorMessage).contains(errorMessage)
+        assertThat(uiState.errorMessageResId).isEqualTo(R.string.note_loading_error)
         assertThat(uiState.goToNotesList).isEqualTo(false)
         assertThat(detailsViewModel.noteTitleText.value).isEqualTo("")
         assertThat(detailsViewModel.noteBodyText.value).isEqualTo("")
@@ -97,7 +97,7 @@ class DetailsViewModelShould {
         detailsViewModel = DetailsViewModel(savedStateHandleMock, notesRepositoryMock)
         detailsViewModel.onErrorShown()
 
-        assertThat(detailsViewModel.uiState.first().errorMessage).isEqualTo(null)
+        assertThat(detailsViewModel.uiState.first().errorMessageResId).isEqualTo(null)
     }
 
 
@@ -114,7 +114,7 @@ class DetailsViewModelShould {
 
         verify(notesRepositoryMock).deleteNote(note.id)
         val uiState = detailsViewModel.uiState.first()
-        assertThat(uiState.errorMessage).isEqualTo(null)
+        assertThat(uiState.errorMessageResId).isEqualTo(null)
         assertThat(uiState.goToNotesList).isEqualTo(true)
     }
 
@@ -136,7 +136,7 @@ class DetailsViewModelShould {
         assertThat(noteCaptor.firstValue.description).isEqualTo(description)
         assertThat(noteCaptor.firstValue.imageUrl).isEqualTo(imageUrl)
         assertThat(noteCaptor.firstValue.modifiedTime).isEqualTo(noteCaptor.firstValue.createdTime)
-        assertThat( detailsViewModel.uiState.first().goToNotesList).isEqualTo(true)
+        assertThat(detailsViewModel.uiState.first().goToNotesList).isEqualTo(true)
     }
 
     @Test
@@ -161,6 +161,40 @@ class DetailsViewModelShould {
         assertThat(noteCaptor.firstValue.description).isEqualTo(description)
         assertThat(noteCaptor.firstValue.imageUrl).isEqualTo(imageUrl)
         assertThat(noteCaptor.firstValue.modifiedTime).isAfter(noteCaptor.firstValue.createdTime)
-        assertThat( detailsViewModel.uiState.first().goToNotesList).isEqualTo(true)
+        assertThat(detailsViewModel.uiState.first().goToNotesList).isEqualTo(true)
+    }
+
+    @Test
+    fun `Show validate error when saving note with empty title`(): Unit = runTest {
+
+        detailsViewModel = DetailsViewModel(savedStateHandleMock, notesRepositoryMock)
+        detailsViewModel.noteTitleText.value = ""
+        detailsViewModel.noteBodyText.value = "Description"
+        detailsViewModel.noteImageUrl.value = "https://image"
+        detailsViewModel.saveOrUpdate()
+
+        verify(notesRepositoryMock, never()).addNewNote(any())
+        val uiState = detailsViewModel.uiState.first()
+        assertThat(uiState.goToNotesList).isEqualTo(false)
+        assertThat(uiState.errorMessageResId).isEqualTo(R.string.title_validation_failed)
+    }
+
+    @Test
+    fun `Show validate error when updating existing note with empty title`(): Unit = runTest {
+        val note = createTestNote()
+        val noteId = "1"
+        whenever(savedStateHandleMock.get<String>("idAsString")) doReturn noteId
+        whenever(notesRepositoryMock.fetchNote(noteId)) doReturn RepositoryResource.Success(note)
+
+        detailsViewModel = DetailsViewModel(savedStateHandleMock, notesRepositoryMock)
+        detailsViewModel.noteTitleText.value = ""
+        detailsViewModel.noteBodyText.value = "Description"
+        detailsViewModel.noteImageUrl.value = "https://image"
+        detailsViewModel.saveOrUpdate()
+
+        verify(notesRepositoryMock, never()).updateNote(any())
+        val uiState = detailsViewModel.uiState.first()
+        assertThat(uiState.goToNotesList).isEqualTo(false)
+        assertThat(uiState.errorMessageResId).isEqualTo(R.string.title_validation_failed)
     }
 }
