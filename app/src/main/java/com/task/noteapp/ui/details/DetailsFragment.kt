@@ -79,8 +79,7 @@ class DetailsFragment : Fragment() {
             viewModel.onErrorShown()
         }
         if (newState.goToNotesList) {
-            val action = DetailsFragmentDirections.toNotesList()
-            findNavController().navigate(action)
+            findNavController().navigateUp()
         }
     }
 }
