@@ -28,7 +28,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textStyle="bold" />
 
-
             <EditText
                 android:id="@+id/note_image_url"
                 android:layout_width="match_parent"
@@ -39,7 +38,7 @@
                 android:hint="@string/image_url_hint"
                 android:imeOptions="flagNoExtractUi"
                 android:importantForAutofill="no"
-                android:inputType="textUri"
+                android:inputType="textMultiLine|textUri"
                 android:maxLines="2" />
 
             <EditText
@@ -52,7 +51,8 @@
                 android:hint="@string/body_hint"
                 android:imeOptions="flagNoExtractUi"
                 android:importantForAutofill="no"
-                android:inputType="text" />
+                android:inputType="textMultiLine"
+              />
         </LinearLayout>
 
     </ScrollView>

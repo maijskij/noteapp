@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.task.noteapp.R
 import com.task.noteapp.data.model.Note
-import com.task.noteapp.ui.utils.asHumanReadableString
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class NotesAdapter @Inject constructor(@ApplicationContext private val appContext: Context) :
@@ -33,17 +34,21 @@ class NotesAdapter @Inject constructor(@ApplicationContext private val appContex
         holder.titleView.text = note.title
         holder.descriptionView.text = note.description
 
-        val createdLabel = appContext.resources.getString(
-            R.string.created,
-            note.createdTime.asHumanReadableString()
-        )
+
+        val createdLabel =
+            appContext.resources.getString(R.string.created, note.createdTime.formatAsString())
         holder.createdView.text = createdLabel
 
-        val updatedLabel = appContext.resources.getString(
-            R.string.updated,
-            note.modifiedTime.asHumanReadableString()
-        )
-        holder.updatedView.text = updatedLabel
+        if (note.createdTime != note.modifiedTime) {
+            val updatedLabel = appContext.resources.getString(
+                R.string.updated,
+                note.modifiedTime.formatAsString()
+            )
+            holder.updatedView.text = updatedLabel
+            holder.updatedView.visibility = View.VISIBLE
+        } else {
+            holder.updatedView.visibility = View.GONE
+        }
 
         if (note.imageUrl.isNotBlank()) {
             Picasso.get().load(note.imageUrl).into(holder.noteImage)
@@ -79,6 +84,13 @@ class NotesAdapter @Inject constructor(@ApplicationContext private val appContex
                 oldItem == newItem
         }
 
+
+        private fun Date.formatAsString(): String {
+            val simpleDateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+            return simpleDateFormat.format(this)
+        }
+
+        private const val DATE_FORMAT = "dd-MM-yyyy"
     }
 }
 
